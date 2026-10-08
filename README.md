@@ -1,8 +1,12 @@
-# 知行同步助手 · Android 端（zhixing-sync-assistant）
+# 知行同步助手 · Zhixing Sync Assistant
 
 > **Only the next call.** — 专注下一通电话，其余交给系统。
 >
 > 「知行同步助手」服务端的 Android 客户端：客户分层管理 + 半自动拨号跟进 + 通讯录/短信/通话双向云端备份。
+
+<img src="https://raw.githubusercontent.com/x2it/zhixing-sync-assistant/main/banner.png" alt="知行同步助手 · Zhixing Sync Assistant" width="100%">
+
+**Zhixing Sync Assistant** is the Android client (Kotlin + Jetpack Compose) for the 知行同步助手 platform: tiered contact management, semi-automatic dialing & follow-up logging, and bidirectional cloud backup of contacts / SMS / call logs. Pairs with the server repo [x2it/zhixing-sync-server](https://github.com/x2it/zhixing-sync-server).
 
 ---
 
@@ -97,6 +101,4 @@ app/src/main/java/com/realtor/geeksales/
 
 ## License
 
-GNU Affero General Public License v3.0 (AGPL-3.0) - 见 [LICENSE](LICENSE)
-
-© 2026 知行工作室
+[AGPL-3.0](LICENSE) © 2026 知行工作室 Zhixing Studio · [https://w3b.pub/](https://w3b.pub/) · support@w3b.pub
