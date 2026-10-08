@@ -52,13 +52,13 @@ abstract class AppDatabase : RoomDatabase() {
                     db.execSQL("ALTER TABLE customers ADD COLUMN im TEXT")
                 }
             },
-            // v2 → v3：知行朋友圈（线上）联系人 id，双向同步映射用
+            // v2 → v3：知行同步助手（线上）联系人 id，双向同步映射用
             object : androidx.room.migration.Migration(2, 3) {
                 override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
                     db.execSQL("ALTER TABLE customers ADD COLUMN wbContactId TEXT")
                 }
             },
-            // v3 → v4：短信记录表（知行朋友圈拉回的短信，供客户时间线展示）
+            // v3 → v4：短信记录表（知行同步助手拉回的短信，供客户时间线展示）
             object : androidx.room.migration.Migration(3, 4) {
                 override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
                     db.execSQL(
@@ -92,7 +92,7 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                 }
             },
-            // v5 → v6：通话记录表（本地通话镜像 + 知行朋友圈通话备份，详情页互动档案）
+            // v5 → v6：通话记录表（本地通话镜像 + 知行同步助手通话备份，详情页互动档案）
             object : androidx.room.migration.Migration(5, 6) {
                 override fun migrate(db: androidx.sqlite.db.SupportSQLiteDatabase) {
                     db.execSQL(

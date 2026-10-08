@@ -52,7 +52,7 @@ data class IOStatus(
     val message: String = "",
     val report: ImportReport? = null,
     val exportCount: Int? = null,
-    /** 最近一次同步的明细（知行朋友圈） */
+    /** 最近一次同步的明细（知行同步助手） */
     val syncSummary: String? = null,
     /** 是否同步失败/部分失败（UI 显示为警示色，不再误报纯成功） */
     val isError: Boolean = false,
@@ -100,7 +100,7 @@ class ImportExportViewModel @Inject constructor(
     fun pullSchema() = doRun("拉取线上模板中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先配置知行同步助手 API Key")
                 return@withContext
             }
             when (val r = wbApi.fetchSchema()) {
@@ -338,7 +338,7 @@ class ImportExportViewModel @Inject constructor(
 
     /**
      * 覆盖通讯录（换机/专用设备场景）：先自动全量备份 → 清空系统通讯录 → 全量写入本地客户（含全部字段与备注）。
-     * UI 侧必须二次确认后才调用；备份文件在「下载/知行朋友圈备份」。
+     * UI 侧必须二次确认后才调用；备份文件在「下载/知行同步助手备份」。
      */
     fun overwriteContacts() = doRun("覆盖通讯录中…") {
         withContext(Dispatchers.IO) {
@@ -355,7 +355,7 @@ class ImportExportViewModel @Inject constructor(
                 tagByCustomer[c.id] = t
                 allTags.addAll(t)
             }
-            // 1) 自动备份（双保险：清空前先落一份 XLSX 到下载/知行朋友圈备份）
+            // 1) 自动备份（双保险：清空前先落一份 XLSX 到下载/知行同步助手备份）
             progress(0.05f, "覆盖前自动备份…")
             val backup = backupToDownloads()
             if (backup == null) {
@@ -745,7 +745,7 @@ class ImportExportViewModel @Inject constructor(
         }
     }
 
-    /** 清空手机系统短信（需 WRITE_SMS）：清空前自动备份 CSV 到 下载/知行朋友圈备份；仅授予读权限时中止提示。
+    /** 清空手机系统短信（需 WRITE_SMS）：清空前自动备份 CSV 到 下载/知行同步助手备份；仅授予读权限时中止提示。
      *  注意：这是删除手机系统短信库本身，不可恢复——UI 必须强确认（输入「清空」）后调用 */
     fun clearSystemSms() = doRun("清空手机系统短信中…") {
         withContext(Dispatchers.IO) {
@@ -753,7 +753,7 @@ class ImportExportViewModel @Inject constructor(
                 != android.content.pm.PackageManager.PERMISSION_GRANTED
             ) {
                 _status.value = IOStatus(
-                    message = "缺少「修改短信」权限：系统设置 → 应用 → 知行朋友圈 → 权限 → 短信 → 允许（删除短信需要写权限，仅读权限无法执行）",
+                    message = "缺少「修改短信」权限：系统设置 → 应用 → 知行同步助手 → 权限 → 短信 → 允许（删除短信需要写权限，仅读权限无法执行）",
                     isError = true
                 )
                 return@withContext
@@ -765,7 +765,7 @@ class ImportExportViewModel @Inject constructor(
             }
             val n = ctx.contentResolver.delete(android.provider.Telephony.Sms.CONTENT_URI, null, null)
             _status.value = IOStatus(
-                message = "已清空手机系统短信 $n 条（清空前已自动备份到 下载/知行朋友圈备份）",
+                message = "已清空手机系统短信 $n 条（清空前已自动备份到 下载/知行同步助手备份）",
                 syncSummary = "此操作不可恢复；备份 CSV 可保留备查"
             )
         }
@@ -778,7 +778,7 @@ class ImportExportViewModel @Inject constructor(
                 != android.content.pm.PackageManager.PERMISSION_GRANTED
             ) {
                 _status.value = IOStatus(
-                    message = "缺少「修改通话记录」权限：系统设置 → 应用 → 知行朋友圈 → 权限 → 电话/通话记录 → 允许",
+                    message = "缺少「修改通话记录」权限：系统设置 → 应用 → 知行同步助手 → 权限 → 电话/通话记录 → 允许",
                     isError = true
                 )
                 return@withContext
@@ -806,20 +806,20 @@ class ImportExportViewModel @Inject constructor(
             }
             val n = ctx.contentResolver.delete(android.provider.CallLog.Calls.CONTENT_URI, null, null)
             _status.value = IOStatus(
-                message = "已清空手机系统通话 $n 条（清空前已自动备份到 下载/知行朋友圈备份）",
+                message = "已清空手机系统通话 $n 条（清空前已自动备份到 下载/知行同步助手备份）",
                 syncSummary = "此操作不可恢复；备份 CSV 可保留备查"
             )
         }
     }
 
-    /** 清空手机系统通讯录（需 WRITE_CONTACTS）：清空前自动备份客户 XLSX 到 下载/知行朋友圈备份 */
+    /** 清空手机系统通讯录（需 WRITE_CONTACTS）：清空前自动备份客户 XLSX 到 下载/知行同步助手备份 */
     fun clearSystemContacts() = doRun("清空手机系统通讯录中…") {
         withContext(Dispatchers.IO) {
             if (androidx.core.content.ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.WRITE_CONTACTS)
                 != android.content.pm.PackageManager.PERMISSION_GRANTED
             ) {
                 _status.value = IOStatus(
-                    message = "缺少「修改联系人」权限：系统设置 → 应用 → 知行朋友圈 → 权限 → 通讯录 → 允许",
+                    message = "缺少「修改联系人」权限：系统设置 → 应用 → 知行同步助手 → 权限 → 通讯录 → 允许",
                     isError = true
                 )
                 return@withContext
@@ -831,7 +831,7 @@ class ImportExportViewModel @Inject constructor(
             }
             val n = ctx.contentResolver.delete(android.provider.ContactsContract.RawContacts.CONTENT_URI, null, null)
             _status.value = IOStatus(
-                message = "已清空手机系统通讯录 $n 条（清空前已自动备份到 下载/知行朋友圈备份）",
+                message = "已清空手机系统通讯录 $n 条（清空前已自动备份到 下载/知行同步助手备份）",
                 syncSummary = "此操作不可恢复；备份 XLSX 可恢复客户数据"
             )
         }
@@ -846,9 +846,9 @@ class ImportExportViewModel @Inject constructor(
         }
     }
 
-    // ================= 知行朋友圈（第三方通讯录）双向同步 =================
+    // ================= 知行同步助手（第三方通讯录）双向同步 =================
     // 设计原则：
-    //  1) 每次同步前自动全量备份本地客户到「下载/知行朋友圈备份」目录（XLSX），防误覆盖；
+    //  1) 每次同步前自动全量备份本地客户到「下载/知行同步助手备份」目录（XLSX），防误覆盖；
     //  2) 导入按号码查重，默认跳过已存在客户，绝不覆盖本地；
     //  3) 导出按号码匹配线上联系人：存在则更新、不存在则新建，绝不删除；
     //  4) 云端 = 异地备份：换机后配好 API Key 即可一键拉回全部客户与跟进历史。
@@ -918,11 +918,11 @@ class ImportExportViewModel @Inject constructor(
         val all = repo.getAll()
         if (all.isEmpty()) return@withContext null
         val stamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(Date())
-        val display = "知行朋友圈备份-${stamp}.xlsx"
+        val display = "知行同步助手备份-${stamp}.xlsx"
         val values = android.content.ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, display)
             put(MediaStore.MediaColumns.MIME_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/知行朋友圈备份")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/知行同步助手备份")
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
         val resolver = ctx.contentResolver
@@ -940,11 +940,11 @@ class ImportExportViewModel @Inject constructor(
         display
     }
 
-    /** 从知行朋友圈导入：联系人 + 标签 + 跟进历史（默认跳过重复，不覆盖本地） */
+    /** 从知行同步助手导入：联系人 + 标签 + 跟进历史（默认跳过重复，不覆盖本地） */
     fun importFromWorkbuddy() = doRun("知行同步：备份中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先在「数据」页配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先在「数据」页配置知行同步助手 API Key")
                 return@withContext
             }
             // 1) 先备份本地
@@ -1068,11 +1068,11 @@ class ImportExportViewModel @Inject constructor(
         }
     }
 
-    /** 导出到知行朋友圈：联系人 + 标签 + 跟进历史（存在更新、不存在新建，不删远端） */
+    /** 导出到知行同步助手：联系人 + 标签 + 跟进历史（存在更新、不存在新建，不删远端） */
     fun exportToWorkbuddy() = doRun("知行同步：备份中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先在「数据」页配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先在「数据」页配置知行同步助手 API Key")
                 return@withContext
             }
             // 1) 先备份本地
@@ -1117,7 +1117,7 @@ class ImportExportViewModel @Inject constructor(
                     }
                 }
             }
-            if (createdTags > 0) progress(0.18f, "已自动创建 $createdTags 个本地标签到知行朋友圈…")
+            if (createdTags > 0) progress(0.18f, "已自动创建 $createdTags 个本地标签到知行同步助手…")
             // 3.6) 同步前检查云端最近批次状态（数据可追溯规范）
             //     上次批次被回滚（reverted）说明云端已撤销该批数据，警告用户避免盲推
             var batchWarn = ""
@@ -1380,7 +1380,7 @@ class ImportExportViewModel @Inject constructor(
     }
 
     // ================= 时光机（快照 + 恢复） =================
-    // 快照 = 全量多表 XLSX（客户/跟进/标签/短信）→ 下载/知行朋友圈备份
+    // 快照 = 全量多表 XLSX（客户/跟进/标签/短信）→ 下载/知行同步助手备份
     // 恢复 = 覆盖式重建：先自动快照当前状态（双保险），再清空本地并按快照重建
 
     /** 手动快照 */
@@ -1388,7 +1388,7 @@ class ImportExportViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             val file = snapshot.snapshotToDownloads()
             _status.value = if (file != null) {
-                IOStatus(message = "快照完成：$file（下载/知行朋友圈备份）")
+                IOStatus(message = "快照完成：$file（下载/知行同步助手备份）")
             } else {
                 IOStatus(message = "没有可快照的数据")
             }
@@ -1415,10 +1415,10 @@ class ImportExportViewModel @Inject constructor(
     }
 
     // ================= 短信备份与同步 =================
-    // 本地：增量备份 CSV 到下载目录；云端：双向同步到知行朋友圈 /api/messages。
+    // 本地：增量备份 CSV 到下载目录；云端：双向同步到知行同步助手 /api/messages。
     // 隐私：短信为最敏感数据，默认本地备份；上云仅在用户主动点击「同步」时执行。
 
-    /** 本地增量备份短信（CSV 到 Downloads/知行朋友圈备份），需 READ_SMS 权限 */
+    /** 本地增量备份短信（CSV 到 Downloads/知行同步助手备份），需 READ_SMS 权限 */
     fun backupSms() = doRun("短信备份中…") {
         withContext(Dispatchers.IO) {
             val r = smsExporter.backupToDownloads()
@@ -1436,14 +1436,14 @@ class ImportExportViewModel @Inject constructor(
     }
 
     /**
-     * 本地短信/通话表导出 CSV 到 下载/知行朋友圈备份（覆盖前自动备份，防覆盖丢失）。
+     * 本地短信/通话表导出 CSV 到 下载/知行同步助手备份（覆盖前自动备份，防覆盖丢失）。
      * rows 每行为一列 CSV 单元格（已含逗号转义）；无数据返回 null。
      */
     private suspend fun backupLocalCsv(kind: String, header: List<String>, rows: List<List<String>>): String? =
         withContext(Dispatchers.IO) {
             if (rows.isEmpty()) return@withContext null
             val stamp = java.text.SimpleDateFormat("yyyyMMdd-HHmmss", java.util.Locale.getDefault()).format(java.util.Date())
-            val display = "知行朋友圈备份-${kind}-$stamp.csv"
+            val display = "知行同步助手备份-${kind}-$stamp.csv"
             val sb = StringBuilder()
             fun escCell(c: String): String =
                 if (c.contains(',') || c.contains('"') || c.contains('\n')) "\"" + c.replace("\"", "\"\"") + "\"" else c
@@ -1453,7 +1453,7 @@ class ImportExportViewModel @Inject constructor(
                 val values = android.content.ContentValues().apply {
                     put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, display)
                     put(android.provider.MediaStore.MediaColumns.MIME_TYPE, "text/csv")
-                    put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS + "/知行朋友圈备份")
+                    put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS + "/知行同步助手备份")
                 }
                 val resolver = ctx.contentResolver
                 val uri = resolver.insert(android.provider.MediaStore.Files.getContentUri("external"), values)
@@ -1464,11 +1464,11 @@ class ImportExportViewModel @Inject constructor(
             if (ok == null) null else display
         }
 
-    /** 覆盖短信记录：以云端短信为准重建本地记录（执行前自动备份本地短信到 下载/知行朋友圈备份） */
+    /** 覆盖短信记录：以云端短信为准重建本地记录（执行前自动备份本地短信到 下载/知行同步助手备份） */
     fun overwriteSms() = doRun("覆盖短信记录中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先配置知行同步助手 API Key")
                 return@withContext
             }
             progress(0.05f, "覆盖前备份本地短信…")
@@ -1525,11 +1525,11 @@ class ImportExportViewModel @Inject constructor(
         }
     }
 
-    /** 覆盖通话记录：以云端通话为准重建本地记录（执行前自动备份本地通话到 下载/知行朋友圈备份） */
+    /** 覆盖通话记录：以云端通话为准重建本地记录（执行前自动备份本地通话到 下载/知行同步助手备份） */
     fun overwriteCalls() = doRun("覆盖通话记录中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先配置知行同步助手 API Key")
                 return@withContext
             }
             progress(0.05f, "覆盖前备份本地通话…")
@@ -1587,11 +1587,11 @@ class ImportExportViewModel @Inject constructor(
         }
     }
 
-    /** 短信同步到知行朋友圈（本地系统短信增量推送，需 READ_SMS） */
+    /** 短信同步到知行同步助手（本地系统短信增量推送，需 READ_SMS） */
     fun exportSmsToWorkbuddy() = doRun("短信同步到云端中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先配置知行同步助手 API Key")
                 return@withContext
             }
             // 权限预检查：无 READ_SMS 权限直接明确报错引导，不进入"读取 0 条假成功"
@@ -1601,7 +1601,7 @@ class ImportExportViewModel @Inject constructor(
                 _status.value = IOStatus(
                     message = "未授予「短信」权限，无法读取短信",
                     isError = true,
-                    syncSummary = "请到 系统设置 → 应用 → 知行朋友圈 → 权限 → 短信 开启后重试"
+                    syncSummary = "请到 系统设置 → 应用 → 知行同步助手 → 权限 → 短信 开启后重试"
                 )
                 return@withContext
             }
@@ -1688,7 +1688,7 @@ class ImportExportViewModel @Inject constructor(
                 _status.value = IOStatus(
                     message = "读取短信失败：${t.message ?: t.javaClass.simpleName}",
                     isError = true,
-                    syncSummary = "请确认已授予「短信」权限：系统设置 → 应用 → 知行朋友圈 → 权限 → 短信"
+                    syncSummary = "请确认已授予「短信」权限：系统设置 → 应用 → 知行同步助手 → 权限 → 短信"
                 )
                 return@withContext
             }
@@ -1720,9 +1720,9 @@ class ImportExportViewModel @Inject constructor(
                     ctx.contentResolver.query(smsUri, arrayOf("_id"), null, null, null)?.use { it.count } ?: -1
                 }.getOrDefault(-1)
                 when {
-                    sysTotal == -1 -> "无法读取系统短信库：系统返回空（多为系统安全中心拦截短信权限，小米/OPPO/vivo 需在 系统设置 → 应用 → 知行朋友圈 → 权限 → 短信 开启「读取短信」并允许读取历史）。请到系统设置开启后重试"
+                    sysTotal == -1 -> "无法读取系统短信库：系统返回空（多为系统安全中心拦截短信权限，小米/OPPO/vivo 需在 系统设置 → 应用 → 知行同步助手 → 权限 → 短信 开启「读取短信」并允许读取历史）。请到系统设置开启后重试"
                     sysTotal == 0 -> "系统短信库当前为空（可能被清空过）：新短信到达后点「同步到云端」即会自动上传；或点「重置短信同步状态」强制全量对账"
-                    else -> "本机系统短信库有 $sysTotal 条短信，但本次读到 0 条可推送——多为短信读取权限受限（部分手机需在 系统设置 → 应用 → 知行朋友圈 → 权限 → 短信 开启「读取短信」外，还需在系统安全中心允许读取）"
+                    else -> "本机系统短信库有 $sysTotal 条短信，但本次读到 0 条可推送——多为短信读取权限受限（部分手机需在 系统设置 → 应用 → 知行同步助手 → 权限 → 短信 开启「读取短信」外，还需在系统安全中心允许读取）"
                 }
             } else {
                 "短信云端同步完成：推送 $pushed 条（失败 $failed）"
@@ -1753,11 +1753,11 @@ class ImportExportViewModel @Inject constructor(
         }
     }
 
-    /** 从知行朋友圈拉取短信到本地（存 sms_messages 表，供客户时间线展示） */
+    /** 从知行同步助手拉取短信到本地（存 sms_messages 表，供客户时间线展示） */
     fun importSmsFromWorkbuddy() = doRun("拉取云端短信中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先配置知行同步助手 API Key")
                 return@withContext
             }
             // 检查线上短信同步开关；关闭时自动一键开启（PUT /api/settings/sms-sync），
@@ -1836,7 +1836,7 @@ class ImportExportViewModel @Inject constructor(
     fun syncCallsToWorkbuddy() = doRun("通话记录同步中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先配置知行同步助手 API Key")
                 return@withContext
             }
             // 0) 权限预检查：无 READ_CALL_LOG 直接明确报错引导，不进入"读取 0 条假成功"
@@ -1846,7 +1846,7 @@ class ImportExportViewModel @Inject constructor(
                 _status.value = IOStatus(
                     message = "未授予「通话记录」权限，无法读取本机通话记录",
                     isError = true,
-                    syncSummary = "请到 系统设置 → 应用 → 知行朋友圈 → 权限 → 电话/通话记录 开启后重试"
+                    syncSummary = "请到 系统设置 → 应用 → 知行同步助手 → 权限 → 电话/通话记录 开启后重试"
                 )
                 return@withContext
             }
@@ -1874,7 +1874,7 @@ class ImportExportViewModel @Inject constructor(
                 _status.value = IOStatus(
                     message = "读取本机通话记录失败：${mirror.error}",
                     isError = true,
-                    syncSummary = "请确认已授予「通话记录」权限：系统设置 → 应用 → 知行朋友圈 → 权限 → 电话/通话记录；授予后重试"
+                    syncSummary = "请确认已授予「通话记录」权限：系统设置 → 应用 → 知行同步助手 → 权限 → 电话/通话记录；授予后重试"
                 )
                 return@withContext
             }
@@ -1982,7 +1982,7 @@ class ImportExportViewModel @Inject constructor(
     fun pullCallsFromWorkbuddy() = doRun("拉取云端通话记录中…") {
         withContext(Dispatchers.IO) {
             if (apiKeyStore.load().isNullOrBlank()) {
-                _status.value = IOStatus(message = "请先配置知行朋友圈 API Key")
+                _status.value = IOStatus(message = "请先配置知行同步助手 API Key")
                 return@withContext
             }
             when (val sw = wbApi.callSyncEnabled()) {
@@ -2093,7 +2093,7 @@ class ImportExportViewModel @Inject constructor(
             phone = wb.phone,
             phoneNormalized = phoneN,
             wechat = wb.wechat,
-            source = wb.source?.ifBlank { null } ?: "知行朋友圈",
+            source = wb.source?.ifBlank { null } ?: "知行同步助手",
             intentLevel = wbTierToLevel(wb.tier),
             note = restNote,
             nextFollowAt = Formatter.dayToEpoch(wb.nextFollowupDate),

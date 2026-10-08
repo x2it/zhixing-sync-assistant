@@ -28,7 +28,7 @@ import javax.inject.Singleton
 
 /**
  * 时光机：全量快照 + 覆盖恢复。
- * 快照 = 多表 XLSX（客户 / 跟进 / 标签 / 短信），存「下载/知行朋友圈备份」。
+ * 快照 = 多表 XLSX（客户 / 跟进 / 标签 / 短信），存「下载/知行同步助手备份」。
  * 恢复 = 清空本地后按快照重建（调用方须先自动快照当前状态，双保险）。
  */
 @Singleton
@@ -47,7 +47,7 @@ class SnapshotManager @Inject constructor(
         private val DAY_FMT = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     }
 
-    /** 全量快照到 Downloads/知行朋友圈备份，返回文件名；失败返回 null */
+    /** 全量快照到 Downloads/知行同步助手备份，返回文件名；失败返回 null */
     suspend fun snapshotToDownloads(): String? = withContext(Dispatchers.IO) {
         val all = repo.getAll()
         if (all.isEmpty()) return@withContext null
@@ -56,7 +56,7 @@ class SnapshotManager @Inject constructor(
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, display)
             put(MediaStore.MediaColumns.MIME_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/知行朋友圈备份")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/知行同步助手备份")
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
         val uri = ctx.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)

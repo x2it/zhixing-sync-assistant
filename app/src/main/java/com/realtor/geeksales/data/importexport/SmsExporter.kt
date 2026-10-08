@@ -28,7 +28,7 @@ data class SmsReport(
 /**
  * 短信备份：读取系统短信（需 READ_SMS 权限），增量导出 CSV 到下载目录。
  * 隐私说明：短信为最敏感个人数据，本功能仅做本地备份，不上传任何服务器；
- * 文件落在用户自己的「下载/知行朋友圈备份」目录。
+ * 文件落在用户自己的「下载/知行同步助手备份」目录。
  */
 @Singleton
 class SmsExporter @Inject constructor(
@@ -50,7 +50,7 @@ class SmsExporter @Inject constructor(
     private fun lastBackupId(): Long = prefs.getLong(KEY_LAST_ID, 0L)
 
     /**
-     * 增量备份短信到 Downloads/知行朋友圈备份，返回报告；无新短信返回 exported=0。
+     * 增量备份短信到 Downloads/知行同步助手备份，返回报告；无新短信返回 exported=0。
      * 需先确保 READ_SMS 权限（UI 层请求）。
      */
     suspend fun backupToDownloads(): SmsReport = withContext(Dispatchers.IO) {
@@ -106,13 +106,13 @@ class SmsExporter @Inject constructor(
         }
         if (rows.isEmpty()) return@withContext SmsReport(total = 0, exported = 0, matched = matched)
 
-        // 2) 写入 Downloads/知行朋友圈备份
+        // 2) 写入 Downloads/知行同步助手备份
         val stamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(Date())
         val display = "TMA短信备份-${stamp}.csv"
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, display)
             put(MediaStore.MediaColumns.MIME_TYPE, "text/csv")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/知行朋友圈备份")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/知行同步助手备份")
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }
         val uri = ctx.contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)

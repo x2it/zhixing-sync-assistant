@@ -66,7 +66,7 @@ object Formatter {
     fun epochToMinute(ms: Long?): String? =
         ms?.let { if (it <= 0) null else runCatching { sdfFull.get().format(Date(it)) }.getOrNull() }
 
-    /** "yyyy-MM-dd" → EpochMillis（知行朋友圈日期格式）；解析失败返回 null */
+    /** "yyyy-MM-dd" → EpochMillis（知行同步助手日期格式）；解析失败返回 null */
     fun dayToEpoch(s: String?): Long? {
         if (s.isNullOrBlank()) return null
         return runCatching { sdfDay.get().parse(s)?.time }.getOrNull()

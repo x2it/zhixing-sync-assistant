@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
 
-    <!-- 网络（知行朋友圈 API 同步） -->
+    <!-- 网络（知行同步助手 API 同步） -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 

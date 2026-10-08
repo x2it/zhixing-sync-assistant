@@ -9,7 +9,7 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 /**
- * 短信记录：知行朋友圈拉回的短信 + 可选的本地系统短信镜像。
+ * 短信记录：知行同步助手拉回的短信 + 可选的本地系统短信镜像。
  * 注意：本表数据只来自云端同步，不反向写回系统短信箱。
  */
 @Entity(

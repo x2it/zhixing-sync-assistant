@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/** 知行朋友圈联系人（对齐 TMA 客户字段） */
+/** 知行同步助手联系人（对齐 TMA 客户字段） */
 @Serializable
 data class WbContact(
     val id: String = "",
@@ -118,7 +118,7 @@ data class WbRemoteField(
     val order: Int = 0
 )
 
-/** 知行朋友圈跟进记录（对应 TMA 通话登记/跟进历史） */
+/** 知行同步助手跟进记录（对应 TMA 通话登记/跟进历史） */
 @Serializable
 data class WbFollowup(
     val id: String = "",
@@ -137,7 +137,7 @@ data class WbFollowupPage(
     @SerialName("pageSize") val pageSize: Int = 20
 )
 
-/** 知行朋友圈消息记录（短信同步；线上需新增 /api/messages 接口） */
+/** 知行同步助手消息记录（短信同步；线上需新增 /api/messages 接口） */
 @Serializable
 data class WbMessage(
     val id: String = "",
@@ -158,7 +158,7 @@ data class WbMessagePage(
     @SerialName("pageSize") val pageSize: Int = 20
 )
 
-/** 知行朋友圈通话记录（通话备份/同步；线上 /api/calls，需先开启 call-sync 开关） */
+/** 知行同步助手通话记录（通话备份/同步；线上 /api/calls，需先开启 call-sync 开关） */
 @Serializable
 data class WbCall(
     val id: String = "",
@@ -189,7 +189,7 @@ sealed class WbResult<out T> {
 }
 
 /**
- * 知行朋友圈（WorkBuddy）API 客户端。
+ * 知行同步助手（WorkBuddy）API 客户端。
  * 基础地址 {应用访问地址}/api，请求头 X-API-Key 认证。
  */
 @Singleton
@@ -198,8 +198,8 @@ class WorkbuddyApi @Inject constructor(
     private val apiKeyStore: ApiKeyStore
 ) {
     companion object {
-        /** 知行朋友圈默认应用地址；可在「数据」页修改，平台迁移/关停时切换 */
-        const val DEFAULT_BASE_URL = "https://people.app.workbuddy.host/api"
+        /** 知行同步助手默认应用地址；可在「数据」页修改，平台迁移/关停时切换 */
+        const val DEFAULT_BASE_URL = "https://syn.app.workbuddy.host/api"
         const val PAGE_SIZE = 100
         private const val PREFS = "tma_prefs"
         private const val KEY_BASE_URL = "wb_base_url"
@@ -207,7 +207,7 @@ class WorkbuddyApi @Inject constructor(
 
     private val prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
-    /** 当前 API 基础地址（可配置，默认知行朋友圈） */
+    /** 当前 API 基础地址（可配置，默认知行同步助手） */
     fun baseUrl(): String =
         prefs.getString(KEY_BASE_URL, null)?.trim()?.trimEnd('/')?.takeIf { it.isNotBlank() }
             ?: DEFAULT_BASE_URL
@@ -226,7 +226,7 @@ class WorkbuddyApi @Inject constructor(
         prefs.edit().putString(KEY_BASE_URL, cleaned).apply()
     }
 
-    /** 恢复默认地址（知行朋友圈官方网关） */
+    /** 恢复默认地址（知行同步助手官方网关） */
     fun resetBaseUrl() {
         prefs.edit().remove(KEY_BASE_URL).apply()
     }

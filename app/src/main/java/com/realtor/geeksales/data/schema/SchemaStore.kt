@@ -8,7 +8,7 @@ import javax.inject.Singleton
 /**
  * 模板字段定义（schema）。
  *
- * 这是 App 与线上「知行朋友圈」模板对齐的契约：
+ * 这是 App 与线上「知行同步助手」模板对齐的契约：
  * - 内置字段（builtin=true）：key 对应本地 Customer 列，值存主表
  * - 扩展字段（builtin=false）：线上模板新增的自定义字段，值存 customer_fields（EAV）
  *

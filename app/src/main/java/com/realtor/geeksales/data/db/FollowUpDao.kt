@@ -26,7 +26,7 @@ interface FollowUpDao {
     @Query("SELECT * FROM follow_ups ORDER BY createdAt ASC")
     suspend fun getAll(): List<FollowUp>
 
-    /** 按客户 + 备注 + 日期查重（用于知行朋友圈跟进记录去重） */
+    /** 按客户 + 备注 + 日期查重（用于知行同步助手跟进记录去重） */
     @Query("SELECT * FROM follow_ups WHERE customerId = :customerId AND note = :note AND createdAt = :createdAt LIMIT 1")
     suspend fun findByDedupKey(customerId: Long, note: String?, createdAt: Long): FollowUp?
 

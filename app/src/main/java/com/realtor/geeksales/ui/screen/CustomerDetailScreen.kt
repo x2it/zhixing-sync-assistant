@@ -75,7 +75,7 @@ fun CustomerDetailScreen(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) vm.dial(true)
-        else com.realtor.geeksales.ui.components.GlobalToast.showError("未授予「拨打电话」权限：请在 系统设置 → 应用 → 知行朋友圈 → 权限 → 拨打电话 中开启（仅影响「直接拨打」，普通拨号不受影响）")
+        else com.realtor.geeksales.ui.components.GlobalToast.showError("未授予「拨打电话」权限：请在 系统设置 → 应用 → 知行同步助手 → 权限 → 拨打电话 中开启（仅影响「直接拨打」，普通拨号不受影响）")
     }
     androidx.compose.runtime.LaunchedEffect(id) { vm.setCustomerId(id) }
     // 超时降级：3 秒仍未加载出客户，显示明确错误态而非无限转圈（历史"看似假死"来源之一）
@@ -216,13 +216,13 @@ fun CustomerDetailScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text("短信记录", color = Accent, style = MaterialTheme.typography.labelMedium)
                         Spacer(Modifier.width(8.dp))
-                        Text("（知行朋友圈同步）", color = TextMuted, style = MaterialTheme.typography.labelMedium)
+                        Text("（知行同步助手同步）", color = TextMuted, style = MaterialTheme.typography.labelMedium)
                     }
                     Spacer(Modifier.height(6.dp))
                 }
             }
             if (smsList.isEmpty()) {
-                item { EmptyState("暂无云端短信", "在「数据」页从知行朋友圈拉取短信后，这里会显示与该客户相关的短信。") }
+                item { EmptyState("暂无云端短信", "在「数据」页从知行同步助手拉取短信后，这里会显示与该客户相关的短信。") }
             } else {
                 items(smsList) { s -> SmsItem(s) }
             }

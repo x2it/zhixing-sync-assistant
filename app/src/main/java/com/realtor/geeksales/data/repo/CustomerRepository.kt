@@ -203,7 +203,7 @@ class CustomerRepository @Inject constructor(
 
     suspend fun upsertAll(list: List<Customer>) = customerDao.upsertAll(list)
 
-    /** 单条 upsert 并返回行 id（知行朋友圈导入用） */
+    /** 单条 upsert 并返回行 id（知行同步助手导入用） */
     suspend fun upsertAndGetId(c: Customer): Long = customerDao.upsert(c)
 
     suspend fun groupByIntent() = customerDao.groupByIntent()
@@ -256,7 +256,7 @@ class CustomerRepository @Inject constructor(
     suspend fun followUpsInRange(start: Long, end: Long) =
         followUpDao.getByRange(start, end)
 
-    // ---- 知行朋友圈同步辅助 ----
+    // ---- 知行同步助手同步辅助 ----
     suspend fun allFollowUps(): List<FollowUp> = followUpDao.getAll()
 
     /** 按 (customerId, note, createdAt) 查重，避免云端跟进记录重复导入 */
@@ -265,7 +265,7 @@ class CustomerRepository @Inject constructor(
 
     suspend fun insertFollowUps(list: List<FollowUp>) = followUpDao.insertAll(list)
 
-    /** 写回知行朋友圈联系人 id（用于跟进历史推送映射） */
+    /** 写回知行同步助手联系人 id（用于跟进历史推送映射） */
     suspend fun updateWbContactId(customerId: Long, wbId: String) {
         val c = customerDao.getById(customerId) ?: return
         customerDao.upsert(c.copy(wbContactId = wbId, updatedAt = System.currentTimeMillis()))

@@ -9,7 +9,7 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 /**
- * 通话记录：本地系统通话记录镜像 + 知行朋友圈拉回的云端通话。
+ * 通话记录：本地系统通话记录镜像 + 知行同步助手拉回的云端通话。
  * 用于客户详情「互动档案」时间线与通话备份。
  * direction: in=呼入 / out=呼出 / missed=未接（与线上 /api/calls 一致）
  */
