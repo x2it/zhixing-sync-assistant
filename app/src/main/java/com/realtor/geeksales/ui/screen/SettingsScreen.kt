@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.realtor.geeksales.ui.components.GeekCard
 import com.realtor.geeksales.ui.components.GeekGhostButton
@@ -100,7 +99,7 @@ fun SettingsScreen(
                         color = TextPrimary, style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        "数据存于本地 Room SQLite，可用「导出 XLSX」做备份。",
+                        "数据存于本机 Room SQLite，可「导出 XLSX」本地备份，或通过「云端同步」备份到知行同步助手。",
                         color = TextPrimary, style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -113,15 +112,14 @@ fun SettingsScreen(
             }
             GeekCard(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("关于 知行同步助手", color = Accent, style = MaterialTheme.typography.labelMedium)
-                    Text("应用名称：知行同步助手", color = TextPrimary, style = MaterialTheme.typography.bodyMedium)
-                    Text("应用版本：${com.realtor.geeksales.BuildConfig.VERSION_NAME}", color = TextPrimary, style = MaterialTheme.typography.bodyMedium)
-                    Text("目标 SDK：${Build.VERSION.SDK_INT}", color = TextPrimary, style = MaterialTheme.typography.bodyMedium)
+                    Text("关于", color = Accent, style = MaterialTheme.typography.labelMedium)
+                    Text("知行同步助手  v${com.realtor.geeksales.BuildConfig.VERSION_NAME}", color = TextPrimary, style = MaterialTheme.typography.bodyMedium)
+                    Text("目标 SDK：${Build.VERSION.SDK_INT}", color = TextMuted, style = MaterialTheme.typography.labelMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
                         "© 2026 知行工作室",
                         color = Accent,
-                        style = MaterialTheme.typography.labelMedium.copy(textDecoration = TextDecoration.Underline),
+                        style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.clickable { uriHandler.openUri("https://w3b.pub") }
                     )
                 }

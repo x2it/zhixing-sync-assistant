@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.realtor.geeksales.ui.components.GeekCard
 import com.realtor.geeksales.ui.components.GeekPrimaryButton
@@ -67,7 +66,7 @@ fun ComplianceScreen(
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("使用条款 v1", color = Accent, style = MaterialTheme.typography.labelMedium)
                     Text(
-                        "本软件（知行同步助手）为房产经纪人个人自用的人脉管理与拨号辅助工具，仅提供拨号与客户管理功能，不提供任何自动外呼、批量骚扰电话等违反工信部与运营商规定的能力。",
+                        "本软件（知行同步助手）为人脉运营与客户管理个人自用工具，仅提供拨号、跟进登记与数据备份功能，不提供任何自动外呼、批量骚扰电话等违反工信部与运营商规定的能力。",
                         color = TextPrimary, style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
@@ -102,7 +101,7 @@ fun ComplianceScreen(
             Text(
                 "© 2026 知行工作室",
                 color = Accent,
-                style = MaterialTheme.typography.labelSmall.copy(textDecoration = TextDecoration.Underline),
+                style = MaterialTheme.typography.labelSmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.clickable { uriHandler.openUri("https://w3b.pub") }
             )
