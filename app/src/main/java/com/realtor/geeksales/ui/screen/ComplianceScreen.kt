@@ -2,6 +2,7 @@ package com.realtor.geeksales.ui.screen
 
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.realtor.geeksales.ui.components.GeekCard
 import com.realtor.geeksales.ui.components.GeekPrimaryButton
@@ -47,6 +50,7 @@ fun ComplianceScreen(
     onAgree: () -> Unit
 ) {
     val ctx = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     Column(Modifier.fillMaxSize().background(Bg)) {
         GeekTopBar(title = "合规声明", subtitle = "首次使用请确认", onBack = onBack)
         Column(
@@ -63,7 +67,7 @@ fun ComplianceScreen(
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("使用条款 v1", color = Accent, style = MaterialTheme.typography.labelMedium)
                     Text(
-                        "本软件（知行朋友圈）为房产经纪人个人自用的人脉管理与拨号辅助工具，仅提供拨号与客户管理功能，不提供任何自动外呼、批量骚扰电话等违反工信部与运营商规定的能力。",
+                        "本软件（知行同步助手）为房产经纪人个人自用的人脉管理与拨号辅助工具，仅提供拨号与客户管理功能，不提供任何自动外呼、批量骚扰电话等违反工信部与运营商规定的能力。",
                         color = TextPrimary, style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
@@ -95,7 +99,13 @@ fun ComplianceScreen(
                 fontFamily = FontFamily.Monospace, textAlign = TextAlign.Center
             )
             Spacer(Modifier.height(20.dp))
-            Text("© 2026 知行工作室", color = TextMuted, style = MaterialTheme.typography.labelSmall, textAlign = TextAlign.Center)
+            Text(
+                "© 2026 知行工作室",
+                color = Accent,
+                style = MaterialTheme.typography.labelSmall.copy(textDecoration = TextDecoration.Underline),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.clickable { uriHandler.openUri("https://w3b.pub") }
+            )
             Spacer(Modifier.height(40.dp))
         }
     }

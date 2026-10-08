@@ -82,7 +82,7 @@ fun DashboardScreen(
     val maxCount = (intentMap.values.maxOrNull() ?: 0).coerceAtLeast(1)
 
     Column(Modifier.fillMaxSize().background(Bg)) {
-        GeekTopBar(title = "知行朋友圈 // 工作台", subtitle = "Only the next call.")
+        GeekTopBar(title = "知行同步助手 // 工作台", subtitle = "Only the next call.")
         Column(
             Modifier
                 .fillMaxSize()
