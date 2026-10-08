@@ -16,7 +16,7 @@
 
 ## 服务端
 
-- 服务端仓库：[x2it/zhixing-circle](https://github.com/x2it/zhixing-circle)（NestJS + React + PostgreSQL）
+- 服务端仓库：[x2it/zhixing-sync-server](https://github.com/x2it/zhixing-sync-server)（NestJS + React + PostgreSQL）
 - App 通过 `?api_key=` 接入服务端，双向同步客户 / 跟进 / 标签 / 短信 / 通话记录
 
 ## 与旧版 TMA 的关系
