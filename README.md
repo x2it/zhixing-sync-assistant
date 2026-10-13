@@ -1,5 +1,9 @@
 # 知行同步助手 · Zhixing Sync Assistant
 
+![Version](https://img.shields.io/github/v/release/x2it/zhixing-sync-assistant)
+
+**Current version / 当前版本：2.7.13**（与 `app/build.gradle.kts` 的 `versionName` 一致）
+
 > **Only the next call.** — 专注下一通电话，其余交给系统。
 >
 > 「知行同步助手」服务端的 Android 客户端：客户分层管理 + 半自动拨号跟进 + 通讯录/短信/通话双向云端备份。
