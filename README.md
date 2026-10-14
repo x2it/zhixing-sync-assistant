@@ -105,4 +105,4 @@ app/src/main/java/com/realtor/geeksales/
 
 ## License
 
-[AGPL-3.0](LICENSE) © 2026 知行工作室 Zhixing Studio · [https://w3b.pub/](https://w3b.pub/) · support@w3b.pub
+[AGPL-3.0](LICENSE) © 2026 知行工作室 · [https://w3b.pub/](https://w3b.pub/) · support@w3b.pub
