@@ -1,6 +1,7 @@
 # 知行同步助手 · Zhixing Sync Assistant
 
 ![Version](https://img.shields.io/github/v/release/x2it/zhixing-sync-assistant)
+![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)
 
 **Current version / 当前版本：2.7.13**（与 `app/build.gradle.kts` 的 `versionName` 一致）
 
