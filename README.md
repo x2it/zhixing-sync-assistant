@@ -85,6 +85,7 @@ app/src/main/java/com/realtor/geeksales/
 │   ├── components/               # Geek* 通用组件（卡片 / 按钮 / 弹层）
 │   └── theme/                    # 主题与状态色（S/A/B/C/D/V 分层色）
 ├── viewmodel/                    # MVVM ViewModel（同步 / 导入导出 / 模板跟随）
+├── navigation/                   # 路由定义（Routes.kt）
 ├── data/
 │   ├── db/                       # Room 实体、DAO、数据库
 │   ├── repo/                     # Repository
