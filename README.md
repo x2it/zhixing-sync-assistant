@@ -29,7 +29,7 @@
 
 ## 与旧版 TMA 的关系
 
-本项目的前身是 [**TMA（电话营销助理）**](https://github.com/x2it/tma-telemarketing-assistant) —— 一个纯单机版的 Android 电销助手，数据全部本地存储，已停止更新。
+本项目的前身是 [**TMA（电话营销助理）**](https://github.com/x2it/tma) —— 一个纯单机版的 Android 电销助手，数据全部本地存储，已停止更新。
 
 知行同步助手在 TMA 的拨号跟进核心体验之上，增加了云端同步、通讯录/短信/通话双向备份、标签分层体系和 Web 管理端，是 TMA 的官方继任版本。
 
